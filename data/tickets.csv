@@ -1,0 +1,3 @@
+ID,Customer,Issue,Priority,Status,Assigned To,Created At,History
+1001,Kaushik,charger is dead,High,Closed,Govind,2026-11-12 10:22:08,Ticket created|2026-11-12 10:22:48 - Assigned to Govind|2026-11-12 10:23:15 - Ticket closed
+1002,Hrushik,charger cable missing,Medium,Open,Indira,2026-11-12 10:38:29,Ticket created|2026-11-12 10:38:40 - Assigned to Indira

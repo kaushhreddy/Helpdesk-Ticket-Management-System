@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Helpdesk Management System</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1>Helpdesk Management System</h1>
+        <p>Manage and track customer support tickets</p>
+    </header>
+
+
+    <div class="container">
+
+        <!-- Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+
+        <!-- Dashboard -->
+        <h2>Dashboard</h2>
+
+        <div class="dashboard">
+
+            <div class="card">
+                <h3>Total Tickets</h3>
+                <p>{{ total }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Open Tickets</h3>
+                <p>{{ open_tickets }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Closed Tickets</h3>
+                <p>{{ closed_tickets }}</p>
+            </div>
+
+        </div>
+
+
+        <!-- Raise Ticket -->
+        <div class="section">
+
+            <h2>Raise New Ticket</h2>
+
+            <form action="/raise" method="POST">
+
+                <input type="text"
+                       name="customer"
+                       placeholder="Customer Name"
+                       required>
+
+                <textarea name="issue"
+                          placeholder="Describe the Issue"
+                          required></textarea>
+
+                <select name="priority" required>
+                    <option value="">Select Priority</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                    <option value="Urgent">Urgent</option>
+                </select>
+
+                <button type="submit">Raise Ticket</button>
+
+            </form>
+
+        </div>
+
+
+        <!-- Assign Ticket -->
+        <div class="section">
+
+            <h2>Assign Ticket</h2>
+
+            <form action="/assign" method="POST">
+
+                <input type="number"
+                       name="ticket_id"
+                       placeholder="Ticket ID"
+                       required>
+
+                <input type="text"
+                       name="agent"
+                       placeholder="Agent Name"
+                       required>
+
+                <button type="submit">Assign Ticket</button>
+
+            </form>
+
+        </div>
+
+
+        <!-- Close Ticket -->
+        <div class="section">
+
+            <h2>Close Ticket</h2>
+
+            <form action="/close" method="POST">
+
+                <input type="number"
+                       name="ticket_id"
+                       placeholder="Ticket ID"
+                       required>
+
+                <button type="submit">Close Ticket</button>
+
+            </form>
+
+        </div>
+
+
+        <!-- Track Ticket -->
+        <div class="section">
+
+            <h2>Track Ticket</h2>
+
+            <form action="/track" method="GET">
+
+                <input type="number"
+                       name="ticket_id"
+                       placeholder="Enter Ticket ID"
+                       required>
+
+                <button type="submit">Search Ticket</button>
+
+            </form>
+
+
+            {% if selected_ticket %}
+
+                <div class="ticket-details">
+
+                    <h3>Ticket Details</h3>
+
+                    <p><b>ID:</b> {{ selected_ticket["ID"] }}</p>
+                    <p><b>Customer:</b> {{ selected_ticket["Customer"] }}</p>
+                    <p><b>Issue:</b> {{ selected_ticket["Issue"] }}</p>
+                    <p><b>Priority:</b> {{ selected_ticket["Priority"] }}</p>
+                    <p><b>Status:</b> {{ selected_ticket["Status"] }}</p>
+                    <p><b>Assigned To:</b> {{ selected_ticket["Assigned To"] }}</p>
+
+                    <h3>Ticket History</h3>
+
+                    {% for history in selected_ticket["History"] %}
+                        <p>{{ history }}</p>
+                    {% endfor %}
+
+                </div>
+
+            {% elif search_id %}
+
+                <p class="error">Ticket not found!</p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- All Tickets -->
+        <div class="section">
+
+            <h2>All Tickets</h2>
+
+            <div class="table-container">
+
+                <table>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Issue</th>
+                        <th>Priority</th>
+                        <th>Status</th>
+                        <th>Assigned To</th>
+                    </tr>
+
+                    {% for ticket in tickets %}
+
+                    <tr>
+                        <td>{{ ticket["ID"] }}</td>
+                        <td>{{ ticket["Customer"] }}</td>
+                        <td>{{ ticket["Issue"] }}</td>
+                        <td>{{ ticket["Priority"] }}</td>
+                        <td>{{ ticket["Status"] }}</td>
+                        <td>{{ ticket["Assigned To"] }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
